@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.example.composefirestore.ui.theme.ComposefirestoreTheme
 
 
@@ -48,6 +49,9 @@ private infix fun Modifier.label(any: Any): Any {
 
 @Composable
 fun Birth(m: Modifier){
+
+    var userPassword by remember { mutableStateOf("")}
+
     var userName by remember { mutableStateOf("林庚賢")}
     var userWeight by remember { mutableStateOf(3800)}
 
@@ -63,10 +67,8 @@ fun Birth(m: Modifier){
             label = {Text("姓名")},
             placeholder = {Text("請輸入你的姓名")}
 
-
-
-
         )
+
 
         TextField(
             value = userWeight.toString(),
@@ -82,7 +84,19 @@ fun Birth(m: Modifier){
 
         )
 
-        Text("您輸入的姓名是：$userName\n出生體重為：$userWeight 公克")
+        TextField(
+            value = userPassword,
+            onValueChange = { newText ->
+                userPassword = newText
+            },
+            label = { Text("密碼") },
+            placeholder = { Text(text = "請輸入您的密碼") },
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions
+                (keyboardType = KeyboardType.Password)
+        )
+
+        Text("您輸入的姓名是：$userName\n出生體重為：$userWeight 公克"+ "\n密碼：$userPassword")
 
 
         Text("您輸入的姓名是：$userName")
