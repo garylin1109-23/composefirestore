@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -21,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.example.composefirestore.ui.theme.ComposefirestoreTheme
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 
 class MainActivity : ComponentActivity() {
@@ -54,6 +57,8 @@ fun Birth(m: Modifier){
 
     var userName by remember { mutableStateOf("林庚賢")}
     var userWeight by remember { mutableStateOf(3800)}
+    val db = Firebase.firestore
+
 
 
 
@@ -100,6 +105,29 @@ fun Birth(m: Modifier){
 
 
         Text("您輸入的姓名是：$userName")
+
+        Button(onClick = {
+            val user = Person(userName, userWeight, userPassword)
+            db.collection("users")
+                .add(user)
+                .addOnSuccessListener { documentReference ->
+                    var msg = "新增/異動資料成功"
+                }
+                .addOnFailureListener { e ->
+                    var msg = "新增/異動資料失敗：" + e.toString()
+                }
+        })
+        {
+            Text("新增/修改資料")
+        }
+
     }
 
 }
+
+data class Person(
+    var userName: String,
+    var userWeight: Int,
+    var userPassword: String
+)
+
